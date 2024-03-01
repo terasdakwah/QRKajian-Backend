@@ -25,7 +25,7 @@ def last_day_of_month(any_day):
 def index():
     no_hp = session.get('no_hp')
     if not no_hp:
-        return redirect(url_for('user.login'))
+        return redirect(url_for('user.register'))
 
     page = request.args.get('page')
     if not page:
