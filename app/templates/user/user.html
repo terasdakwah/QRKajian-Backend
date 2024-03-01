@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}User{% endblock title %}
+
+{% block main %}
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-table"></i> Data Jamaah
+            <a href="{{ url_for('user.index') }}?export=true&per_page=5000" class="btn btn-primary" style="width: 128px; float: right;margin-right: 10px;"> Eksport Excel</a>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th>No Hp</th>
+                    <th>Tanggal daftar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if data.list_user %}
+                  {% for user in data.list_user %}
+                      <tr>
+                          <td>{{ user.nama }}</td>
+                          <td>{{ user.no_hp }}</td>
+                          <td>{{ user.created }}</td>
+                      </tr>
+                  {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+            {{ data.pagination.links }}
+          </div>
+          <div class="card-footer small text-muted">{{ data.pagination.info }}</div>
+        </div>
+{% endblock main %}
