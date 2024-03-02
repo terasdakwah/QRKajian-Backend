@@ -155,7 +155,7 @@ def index():
         workbook.close()
         output.seek(0)
         fileNameExport = "data_jamaah_%s.xls" % (dt_now)
-        return send_file(output, attachment_filename=fileNameExport, as_attachment=True)
+        return send_file(output, download_name=fileNameExport, as_attachment=True)
 
     pagination = Pagination(css_framework='foundation', page=page,per_page=per_page,total=_user.total)
     data = {
