@@ -38,14 +38,21 @@ def index():
     per_page = int(per_page)
 
     list_user = []
+    filtersedekah = request.args.get('sedekah', 0)
     filtermonth = request.args.get('month')
     if filtermonth:
         filtermonth = int(filtermonth)
         dt_awal = datetime(datetime.now().year, filtermonth, 1, hour = 0, minute = 0, second = 0)
         dt_akhir = last_day_of_month(datetime(datetime.now().year, filtermonth, 1, hour = 23, minute = 59, second = 59))
-        _user = User.objects.order_by("-id").filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).paginate(page=page, per_page=per_page)
+        if filtersedekah == 1:
+            _user = User.objects(sedekah=True).order_by("-id").filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).paginate(page=page, per_page=per_page)
+        else:
+            _user = User.objects.order_by("-id").filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).paginate(page=page, per_page=per_page)
     else:
-        _user = User.objects.order_by("-id").paginate(page=page, per_page=per_page)
+        if filtersedekah == 1:
+            _user = User.objects(sedekah=True).order_by("-id").paginate(page=page, per_page=per_page)
+        else:
+            _user = User.objects.order_by("-id").paginate(page=page, per_page=per_page)
 
     for user in _user.items:
         dt_awal = datetime(datetime.now().year, datetime.now().month, 1, hour = 0, minute = 0, second = 0)
@@ -70,6 +77,10 @@ def index():
             if _kecamatan:
                 kecamatan = _kecamatan.name
 
+        is_sedekah = "BELUM"
+        if user.sedekah:
+            is_sedekah = "YA"
+
         list_user.append({
             "user_id" : str(user.id),
             "nama" : str(user.name),
@@ -87,7 +98,8 @@ def index():
             "usia": calculateAge(user.tanggallahir),
             "pekerjaan": str(user.pekerjaaan),
             "instansi": str(user.instansi),
-            "hobi": str(user.hobi)
+            "hobi": str(user.hobi),
+            "sedekah": is_sedekah,
         })
 
     if request.args.get('export') == 'true':
@@ -114,6 +126,7 @@ def index():
         worksheet.write(0,13, 'Instansi')
         worksheet.write(0,14, 'Hobi')
         worksheet.write(0,15, 'Waktu mendaftar')
+        worksheet.write(0,16, 'Sedekah')
         row = 0
         col = 0
         for user in list_user:
@@ -137,6 +150,7 @@ def index():
             worksheet.write(row, col+14, user['hobi'])
 
             worksheet.write(row, col+15, user['created'])
+            worksheet.write(row, col+16, user['sedekah'])
 
         workbook.close()
         output.seek(0)
@@ -244,7 +258,7 @@ def login():
                 flash('Anda tidak berhak mengakses halaman ini.', 'error')
         else:
             flash('no. hp atau password salah', 'error')
-        
+
     return render_template("user/login.html", data=data, form=form)
 
 @mod_user.route('/register', methods=['GET', 'POST'])

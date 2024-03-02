@@ -81,6 +81,10 @@ def index():
             if _kecamatan:
                 kecamatan = _kecamatan.name
 
+        is_sedekah = "BELUM"
+        if user.sedekah:
+            is_sedekah = "YA"
+
         list_user.append({
             "user_id" : str(user.id),
             "nama" : str(user.name),
@@ -96,7 +100,8 @@ def index():
             "usia": calculateAge(user.tanggallahir),
             "pekerjaan": str(user.pekerjaaan),
             "instansi": str(user.instansi),
-            "hobi": str(user.hobi)
+            "hobi": str(user.hobi),
+            "sedekah": is_sedekah,
         })
 
     if request.args.get('export') == 'true':
@@ -122,6 +127,7 @@ def index():
         worksheet.write(0,12, 'Hobi')
 
         worksheet.write(0,13, 'Waktu Hadir')
+        worksheet.write(0,14, 'Sedekah')
         row = 0
         col = 0
         for user in list_user:
@@ -143,6 +149,7 @@ def index():
             worksheet.write(row, col+12, user['hobi'])
 
             worksheet.write(row, col+13, user['created'])
+            worksheet.write(row, col+14, user['sedekah'])
 
         workbook.close()
         output.seek(0)

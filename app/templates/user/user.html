@@ -6,7 +6,8 @@
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i> Data Jamaah
-            <a href="{{ url_for('user.index') }}?export=true&per_page=5000" class="btn btn-primary" style="width: 128px; float: right;margin-right: 10px;"> Eksport Excel</a>
+            <a href="{{ url_for('user.index') }}?sedekah=1&export=true&per_page=5000" class="btn btn-primary" style="width: 128px; float: right;"> Eksport Sedekah</a>
+            <a href="{{ url_for('user.index') }}?export=true&per_page=5000" class="btn btn-primary" style="width: 128px; float: right;margin-right: 10px;"> Eksport Semua</a>
           </div>
 
           <div class="card-body">
