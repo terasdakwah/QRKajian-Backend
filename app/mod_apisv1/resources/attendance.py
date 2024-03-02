@@ -31,7 +31,7 @@ class FillAttendanceRes(Resource):
             user_name = textwrap.shorten(user.name, width=10, placeholder="..")
             attendance = Attendance.objects(user_id=user.id).filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).first()
             if attendance:
-                return return_error(200, "Hai %s Poin kamu: %s" % (user_name, user.poin,))
+                return return_error(200, "Hai kak %s, poin kamu: %s<br />Semangat Ngajinyaa ~" % (user_name, user.poin,))
 
             attendance = Attendance()
             attendance.user_id = user.id
