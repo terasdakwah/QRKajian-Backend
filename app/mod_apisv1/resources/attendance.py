@@ -24,12 +24,16 @@ class FillAttendanceRes(Resource):
             user = User.objects(id=token_id).first()
             if not user:
                 return return_error(200, 'Tidak terdaftar')
+            
+            if attendance_type == "NGAJI_AMIDA":
+                if user.gender != "P":
+                    return return_error(200, 'kak? Ngaji Amida khusus untuk Wanita yaaa')
 
             dt_awal = datetime.now() - timedelta(hours=5)
             dt_akhir = datetime.now()
 
             user_name = textwrap.shorten(user.name, width=10, placeholder="..")
-            attendance = Attendance.objects(user_id=user.id).filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).first()
+            attendance = Attendance.objects(user_id=user.id, type=attendance_type).filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).first()
             if attendance:
                 return return_error(200, "Hai kak %s, poin kamu: %s<br />Semangat Ngajinyaa ~" % (user_name, user.poin,))
 
