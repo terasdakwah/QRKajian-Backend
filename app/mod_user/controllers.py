@@ -38,18 +38,18 @@ def index():
     per_page = int(per_page)
 
     list_user = []
-    filtersedekah = request.args.get('sedekah', 0)
+    filtersedekah = request.args.get('sedekah')
     filtermonth = request.args.get('month')
     if filtermonth:
         filtermonth = int(filtermonth)
         dt_awal = datetime(datetime.now().year, filtermonth, 1, hour = 0, minute = 0, second = 0)
         dt_akhir = last_day_of_month(datetime(datetime.now().year, filtermonth, 1, hour = 23, minute = 59, second = 59))
-        if filtersedekah == 1:
+        if filtersedekah == 'true':
             _user = User.objects(sedekah=True).order_by("-id").filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).paginate(page=page, per_page=per_page)
         else:
             _user = User.objects.order_by("-id").filter(Q(created__gte=dt_awal) & Q(created__lte=dt_akhir)).paginate(page=page, per_page=per_page)
     else:
-        if filtersedekah == 1:
+        if filtersedekah == 'true':
             _user = User.objects(sedekah=True).order_by("-id").paginate(page=page, per_page=per_page)
         else:
             _user = User.objects.order_by("-id").paginate(page=page, per_page=per_page)
