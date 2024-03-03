@@ -14,6 +14,7 @@ from app.mod_user.models import User, Provinces, Regencies, Districts
 from werkzeug.security import check_password_hash, generate_password_hash
 from mongoengine.queryset.visitor import Q
 from app.utils.helper import allowed_file_image, string_date, calculateAge
+from flask import make_response
 
 mod_user = Blueprint('user', __name__, url_prefix='/')
 
@@ -298,7 +299,11 @@ def register():
         else:
             flash('Error : Coba lagi, silakan isi semua pilihan dengan benar', 'error')
 
-    return render_template("user/register.html", data=data, form=form)
+    response = make_response(render_template("user/register.html", data=data, form=form))
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @mod_user.route('/register/success', methods=['GET', 'POST'])
 def registerSuccess():
@@ -318,7 +323,7 @@ def logout():
 
 @mod_user.route('/get_kab/<id>', methods=['GET'])
 def get_kab(id):
-    data = [{'id': '', 'name': 'Kabupaten/Kota'}]
+    data = [{'id': '', 'name': 'Kabupaten/Kota Domisili'}]
     if id != "":
         regencies = Regencies.objects(province=id).limit(100)
         for regency in regencies:
@@ -327,7 +332,7 @@ def get_kab(id):
 
 @mod_user.route('/get_kec/<id>', methods=['GET'])
 def get_kec(id):
-    data = [{'id': '', 'name': 'Kecamatan'}]
+    data = [{'id': '', 'name': 'Kecamatan Domisili'}]
     if id != "":
         districts = Districts.objects(regency=id).limit(100)
         for datax in districts:

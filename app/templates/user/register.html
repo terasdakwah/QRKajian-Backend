@@ -19,6 +19,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" integrity="sha512-TQQ3J4WkE/rwojNFo6OJdyu6G8Xe9z8rMrlF9y7xpFbQfW5g8aSWcygCQ4vqRiJqFsDsE1T6MoAOMJkFXlrI9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <style>
+    .table-condensed {
+      font-size: x-large;
+    }
+  </style>
 </head>
 
 <body class="bg-light">
@@ -62,7 +67,7 @@
             <div class="form-row">
               <div class="col-md-12">
                 <div class="form-label-group">
-                  {{ form.name(id="name", class="form-control", type="text", placeholder="Nama", required="true") }}
+                  {{ form.name(id="name", class="form-control", type="text", placeholder="Nama", required="true", autofocus="true") }}
                   <label for="name">Nama</label>
                 </div>
               </div>
@@ -73,7 +78,7 @@
             <div class="form-row">
               <div class="col-md-12">
                 <div class="form-label-group">
-                  {{ form.no_hp(id="no_hp", class="form-control", type="text", placeholder="Nomor Hp", required="true", autofocus="true") }}
+                  {{ form.no_hp(id="no_hp", class="form-control", type="text", placeholder="Nomor Hp", required="true") }}
                   <label for="no_hp">Nomor Hp (WA)</label>
                 </div>
               </div>
@@ -113,7 +118,7 @@
               <div class="col-md-12">
                 <div class="form-label-group">
                   <select name="provinsi" id="provinsi" required class="form-control" style="height: 50px;" onchange="getdatakota()">
-                      <option value="">Provinsi</option>
+                      <option value="">Provinsi Domisili</option>
                       {% if form.provinsi %}
                       {% for provinsi in form.provinsi %}
                           {{ provinsi }}
@@ -130,7 +135,7 @@
               <div class="col-md-12">
                 <div class="form-label-group">
                   <select name="kabupaten" id="kabupaten" required class="form-control" style="height: 50px;" onchange="getdatakec()">
-                    <option value="">Kabupaten/Kota</option>
+                    <option value="">Kabupaten/Kota Domisili</option>
                     {% if form.kabupaten %}
                     {% for kabupaten in form.kabupaten %}
                         {{ kabupaten }}
@@ -147,7 +152,7 @@
               <div class="col-md-12">
                 <div class="form-label-group">
                   <select name="kecamatan" id="kecamatan" required class="form-control" style="height: 50px;">
-                    <option value="">Kecamatan</option>
+                    <option value="">Kecamatan Domisili</option>
                     {% if form.kecamatan %}
                     {% for kecamatan in form.kecamatan %}
                         {{ kecamatan }}
