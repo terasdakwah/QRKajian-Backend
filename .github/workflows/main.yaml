@@ -1,0 +1,51 @@
+name: Flask Docker CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+  build_and_push:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ojiset22
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ojiset22/terasdakwah-qrbackend:latest
+
+      - name: Trigger NusaPod Webhook (Server Pull)
+        run: |
+          echo "Calling NusaPod Webhook.."
+          curl -X POST https://nusapod.com/containers/webhook \
+            -H "Content-Type: application/json" \
+            -H "X-Webhook-Token: ${{ secrets.WEBHOOK_TOKEN }}" \
+            -d '{"name":"QrBackend","image":"ojiset22/terasdakwah-qrbackend:latest"}'
