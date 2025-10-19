@@ -12,9 +12,8 @@ Session(app)
 
 db = MongoEngine()
 db.init_app(app)
-mongo_client = MongoClient(MONGODB_HOST, MONGODB_PORT)
+mongo_client = MongoClient(MONGODB_HOST, MONGODB_PORT, username=MONGODB_USERNAME, password=MONGODB_PASSWORD)
 db_raw = mongo_client[MONGODB_DB]
-db_raw.authenticate(MONGODB_USERNAME, MONGODB_PASSWORD)
 
 # Import a module / component using its blueprint handler variable
 from app.mod_apisv1.routes import mod_apisv1
