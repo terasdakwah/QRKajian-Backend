@@ -5,15 +5,18 @@ from flask_cors import CORS
 from flask_session import Session
 from config import MONGODB_HOST, MONGODB_PORT, MONGODB_DB, MONGODB_USERNAME, MONGODB_PASSWORD
 
+mongo_client = MongoClient(MONGODB_HOST, MONGODB_PORT, username=MONGODB_USERNAME, password=MONGODB_PASSWORD)
+db_raw = mongo_client[MONGODB_DB]
+
 app = Flask(__name__ , static_url_path='/static')
 app.config.from_object('config')
 CORS(app)
+
+app.config["SESSION_MONGODB"] = mongo_client
 Session(app)
 
 db = MongoEngine()
 db.init_app(app)
-mongo_client = MongoClient(MONGODB_HOST, MONGODB_PORT, username=MONGODB_USERNAME, password=MONGODB_PASSWORD)
-db_raw = mongo_client[MONGODB_DB]
 
 # Import a module / component using its blueprint handler variable
 from app.mod_apisv1.routes import mod_apisv1
